@@ -34,26 +34,27 @@
         <property name="user" value="${jdbc.username}"></property>
         <property name="password" value="${jdbc.password}"></property>
     </bean>
-    <!--Mybatis的SessionFactory配置-->
-    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="typeAliasesPackage" value="com.zhangxin.tmall.pojo" />
-        <property name="dataSource" ref="dataSource"/>
-        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-        <!--分页插件，目前先注释，后面重构的时候才会使用
-        <property name="plugins">
-            <array>
-                <bean class="com.github.pagehelper.PageInterceptor">
-                    <property name="properties">
-                        <value>
-                        </value>
-                    </property>
-                </bean>
-            </array>
-        </property>
-        -->
+
+    <!-- sqlSessionFaction相当于mybatis的核心配置文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource"></property>
+        <!-- 引入mapping -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+        <!-- 引入mybatis-config.xml文件（除了数据源和mapper，其他配置都在那里配置） -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
     </bean>
 
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.zhangxin.tmall.dao"/>
+    <!-- mybatis扫描包，自动代理方式绑定到接口 -->
+    <mybatis-spring:scan base-package="com.zhangxin.tmall.dao" />
+
+    <!-- 使用annotation来控制事务，使@Transaction生效 -->
+    <tx:annotation-driven/>
+
+    <!-- 整合事务，class那个适用于mybatis和传统jdbc -->
+    <!-- 后续深层次的事务理解需要用到这个 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
     </bean>
+
 </beans>
