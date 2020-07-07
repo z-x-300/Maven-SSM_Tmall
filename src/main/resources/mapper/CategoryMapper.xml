@@ -27,17 +27,17 @@
     <select id="getAllCategoryForAdmin" resultType="com.zhangxin.tmall.pojo.Category">
      select * from category
     </select>
-    <select id="addCategoryForAdmin">
+    <insert id="addCategoryForAdmin">
      insert into category values(null,#{name},#{imageUrl})
-    </select>
+    </insert>
     <update id="updateCategoryForAdmin">
       update category set name =#{name} where id =#{id}
     </update>
     <delete id="deleteCategoryForAdmin" parameterType="int">
         delete from category where id =#{id}
     </delete>
-    <select id="getCategoryLocationById" parameterType="int">
-      select count (*) from  category where id >#{id}
+    <select id="getCategoryLocationById" parameterType="int" resultType="int">
+    select count(*) from category where #{id} > id
     </select>
     <select id="getCategoryByIdForAdmin" parameterType="int" resultType="com.zhangxin.tmall.pojo.Category">
         select * from category where id =#{id}

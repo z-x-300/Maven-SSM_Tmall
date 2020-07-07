@@ -7,5 +7,16 @@
     <select id="getPropertyByCategoryId" parameterType="int" resultType="com.zhangxin.tmall.pojo.Property">
         select * from property where categoryid =#{categoryId}
     </select>
-
+    <insert id="addPropertyForAdmin">
+      insert into property values(null,#{name},#{categoryId})
+</insert>
+    <update id="updatePropertyForAdmin">
+        update property set  name = #{propertyName} where id = #{propertyId}
+    </update>
+    <delete id="deletePropertyForAdmin" parameterType="int">
+        delete from property where id =#{id}
+    </delete>
+    <select id="getPropertyLocation" parameterType="int" resultType="int">
+        select count(*) from property where #{id} > id
+    </select>
 </mapper>

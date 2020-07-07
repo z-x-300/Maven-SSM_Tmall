@@ -12,7 +12,7 @@ public interface CategoryDao {
     //查询所有种类
     public List<Category> getAllCategoryForAdmin();
     //增加一个category
-    public void addCategoryForAdmin(@Param("name")String name,@Param("imageUrl") String imageUrl);
+    public void addCategoryForAdmin(@Param("name") String name,@Param("imageUrl") String imageUrl);
     //更新一个category
     public void updateCategoryForAdmin(@Param("id") int id,@Param("name") String name);
     //删除一个category
