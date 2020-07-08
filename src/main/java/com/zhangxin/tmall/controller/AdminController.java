@@ -6,9 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhangxin.tmall.pojo.Category;
 import com.zhangxin.tmall.pojo.Product;
 import com.zhangxin.tmall.pojo.Property;
-import com.zhangxin.tmall.service.CategoryService;
-import com.zhangxin.tmall.service.ProductService;
-import com.zhangxin.tmall.service.PropertyService;
+import com.zhangxin.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +29,12 @@ public class AdminController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SixImageService sixImageService;
+
+    @Autowired
+    private FiveImageService fiveImageService;
 
     @RequestMapping("/admin/showCategory.do")
     public ModelAndView showCategory(Integer start) {
@@ -285,5 +289,107 @@ public class AdminController {
         modelAndView.addObject("product",product);
         modelAndView.setViewName("forward:/admin/jsp/productImageManager.jsp");
         return modelAndView;
+    }
+
+    //添加5张图片
+    @RequestMapping(value= {"/admin/addFiveImage.do","post"})
+    public ModelAndView addFiveImage(Integer productId,Part picture,HttpServletRequest request){
+        //获取文件名
+        String pictureName =picture.getSubmittedFileName();
+        System.out.println(pictureName);
+        //定义最终保存的文件名
+        String fileName =null;
+        //获取tomcat工作目录
+        String tomcatPath =request.getSession().getServletContext().getRealPath("upload");
+        System.out.println(tomcatPath);
+        //判断文件传来的格式
+        if(pictureName.endsWith(".jpg")) {
+            fileName = System.currentTimeMillis() + ".jpg";
+        }else if(pictureName.endsWith(".png")) {
+            fileName = System.currentTimeMillis() + ".png";
+        }else {
+            ModelAndView modelAndView = new ModelAndView("redirect:/admin/showImages.do?message=error&productId=" + productId);
+            return modelAndView;
+        }
+        //判断tomcat下的upload文件夹是否存在，若不存在就创建
+        File tomcatPathFolder = new File(tomcatPath);
+        if(!tomcatPathFolder.exists()) {
+            tomcatPathFolder.mkdir();
+        }
+        //获取tomcat下upload文件下刚上传的图片
+        File tomcatPathFile = new File(tomcatPathFolder,fileName);
+        //写入文件
+        try {
+            picture.write(tomcatPathFile.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //上传完图片之后进行数据库中添加category
+        String imageUrl = "/SSMTmall/upload/" + fileName;
+        fiveImageService.addFiveImageForAdmin(imageUrl,imageUrl,productId);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/showImages.do?message=success&productId=" + productId);
+        return modelAndView;
+    }
+
+    //删除图片
+    @RequestMapping("/admin/deleteFiveImage.do")
+    public ModelAndView deleteFiveImage(Integer id,Integer productId){
+        fiveImageService.deleteFiveImageForAdmin(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/showImages.do?productId=" + productId);
+        return modelAndView;
+    }
+
+    //增加sixImage
+    @RequestMapping(value= {"/admin/addSixImage.do","post"})
+    public ModelAndView addSixImageLittleImage(Integer productId,Part picture,HttpServletRequest request) {
+        //获取文件名
+        String pictureName = picture.getSubmittedFileName();
+        System.out.println(pictureName);
+        //定义最终保存的文件名
+        String fileName = null;
+        //获取tomcat工作目录
+        String tomcatPath = request.getSession().getServletContext().getRealPath("upload");
+        System.out.println(tomcatPath);
+        //判断文件传来的格式起对应的后缀名
+        if(pictureName.endsWith(".jpg")) {
+            fileName = System.currentTimeMillis() + ".jpg";
+        }else if(pictureName.endsWith(".png")) {
+            fileName = System.currentTimeMillis() + ".png";
+        }else {
+            ModelAndView mav = new ModelAndView("redirect:/admin/showImages.do?message=error&productId=" + productId);
+            return mav;
+        }
+        //判断tomcat下的upload文件夹是否存在，若不存在就创建
+        File tomcatPathFolder = new File(tomcatPath);
+        if(!tomcatPathFolder.exists()) {
+            tomcatPathFolder.mkdir();
+        }
+        //获取tomcat下的upload下的刚上传的那个图片
+        File tomcatPathFile = new File(tomcatPathFolder,fileName);
+        //写入文件
+        try {
+            picture.write(tomcatPathFile.toString());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //上传完图片之后进行数据库中添加category
+        String imageUrl = "/SSMTmall/upload/" + fileName;
+        sixImageService.addSixImageForAdmin(imageUrl,productId);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("redirect:/admin/showImages.do?message=success&productId=" + productId);
+        return mav;
+    }
+
+    //删除sixImage
+    @RequestMapping("/admin/deleteSixImage.do")
+    public ModelAndView deleteSixImage(Integer id,Integer productId) {
+        sixImageService.deleteSixImageByIdForAdmin(id);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("redirect:/admin/showImages.do?productId=" + productId);
+        return mav;
     }
 }
