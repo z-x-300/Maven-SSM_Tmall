@@ -3,10 +3,7 @@ package com.zhangxin.tmall.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.zhangxin.tmall.pojo.Category;
-import com.zhangxin.tmall.pojo.Product;
-import com.zhangxin.tmall.pojo.Property;
-import com.zhangxin.tmall.pojo.PropertyValue;
+import com.zhangxin.tmall.pojo.*;
 import com.zhangxin.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +36,9 @@ public class AdminController {
 
     @Autowired
     private PropertyValueService propertyValueService;
+
+    @Autowired
+    private UserService userService;
 
     @RequestMapping("/admin/showCategory.do")
     public ModelAndView showCategory(Integer start) {
@@ -433,6 +433,73 @@ public class AdminController {
       }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/propertyValueManage.do?productId=" + productId + "&categoryId=" + categoryId);
+        return modelAndView;
+    }
+
+    //查询所有用户
+    @RequestMapping("/admin/showUser.do")
+    public ModelAndView showUser(Integer start){
+//获取总数
+        List<User> userList = userService.getAllUserForAdmin();
+        PageInfo<User> pageInfo = new PageInfo<User>(userList);
+        int total = (int) pageInfo.getTotal();
+        //判断边界
+        if(start > total) {
+            start = total / 5 * 5;
+        }
+        if(start == total) {
+            //（90为9，所以要减一）
+            start = (total / 5 - 1) * 5;
+        }
+        if(start <= 0) {
+            //判断最小边界
+            start = 0;
+        }
+        PageHelper.offsetPage(start,5);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("users",userList);
+        modelAndView.addObject("start",start);
+        modelAndView.addObject("total",total);
+        modelAndView.setViewName("forward:/admin/jsp/userManager.jsp");
+        return modelAndView;
+    }
+
+    //修改用户名
+    @RequestMapping("/admin/updateUserName.do")
+    public ModelAndView updateUserName(Integer userId,String userName,Integer start){
+       //判断用户名是否重复
+        User user =userService.getUserByUserName(userName);
+        if (user!=null){
+            ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?message=error&start=" + start);
+            return modelAndView;
+        }else {
+            userService.updateUserNameForAdmin(userId,userName);
+            ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
+            return modelAndView;
+        }
+    }
+
+
+    //修改密码
+    @RequestMapping("/admin/updateUserPassword.do")
+    public ModelAndView updatePassword(Integer userId,String userPassword,Integer start){
+        userService.updatePasswordForAdmin(userId,userPassword);
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
+        return modelAndView;
+    }
+
+    //删除用户
+    @RequestMapping("/admin/deleteUser.do")
+    public ModelAndView deleteUser(Integer userId){
+        int start = userService.getUserLocation(userId);
+        userService.deleteUserForAdmin(userId);
+        start = userId / 5 * 5;
+        if(userId % 5 != 0) {
+            start = userId / 5 * 5;
+        }else {
+            start = (userId / 5 - 1) * 5;
+        }
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
         return modelAndView;
     }
 }
