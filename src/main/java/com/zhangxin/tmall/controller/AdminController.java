@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhangxin.tmall.pojo.Category;
 import com.zhangxin.tmall.pojo.Product;
 import com.zhangxin.tmall.pojo.Property;
+import com.zhangxin.tmall.pojo.PropertyValue;
 import com.zhangxin.tmall.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,9 @@ public class AdminController {
 
     @Autowired
     private FiveImageService fiveImageService;
+
+    @Autowired
+    private PropertyValueService propertyValueService;
 
     @RequestMapping("/admin/showCategory.do")
     public ModelAndView showCategory(Integer start) {
@@ -391,5 +395,44 @@ public class AdminController {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/admin/showImages.do?productId=" + productId);
         return mav;
+    }
+
+    //显示商品属性和属性值
+    @RequestMapping("/admin/propertyValueManage.do")
+    public ModelAndView showPropertyValue(Integer categoryId,Integer productId){
+        //获取属性
+        List<Property> propertyList =propertyService.getPropertyByCategoryId(categoryId);
+        //获取属性值
+        List<PropertyValue> propertyValueList =propertyValueService.getAllPropertyValueByProductIdForAdmin(productId);
+        //获取商品
+        Product product =productService.getProductById(productId);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("categoryId",categoryId);
+        modelAndView.addObject("properties",propertyList);
+        modelAndView.addObject("propertyValues",propertyValueList);
+        modelAndView.addObject("product",product);
+        modelAndView.setViewName("forward:/admin/jsp/propertyValueManager.jsp");
+        return modelAndView;
+
+    }
+
+    //添加/修改属性值
+    @RequestMapping("/admin/updatePropertyValue.do")
+    public ModelAndView updatePropertyValue(Integer categoryId,Integer productId,Integer[] propertyId,String[] value){
+     Integer [] propertyIds= propertyId;
+     String [] values =value;
+     //进行添加或修改
+      for (int i=0;i<propertyIds.length;i++){
+          PropertyValue propertyValue =propertyValueService.getPropertyValueByProductIdAndPropertyIdForAdmin(productId,propertyIds[i]);
+          //如果没有属性就添加，否则修改
+          if (propertyValue==null){
+              propertyValueService.addPropertyValueForAdmin(productId,propertyIds[i],values[i]);
+          }else {
+              propertyValueService.updatePropertyValueForAdmin(productId,propertyIds[i],values[i]);
+          }
+      }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("redirect:/admin/propertyValueManage.do?productId=" + productId + "&categoryId=" + categoryId);
+        return modelAndView;
     }
 }
