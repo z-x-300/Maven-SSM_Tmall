@@ -42,4 +42,9 @@ public class UserServiceImpl implements UserService {
     public int getUserLocation(int id){
         return userDao.getUserLocation(id);
     }
+
+    //根据用户id获取用户名
+    public User getUserById(Integer id){
+        return userDao.getUserById(id);
+    }
 }

@@ -22,4 +22,7 @@
     <select id="getUserLocation" parameterType="int" resultType="int">
      select count(*) from user where #{id} > id
     </select>
+    <select id="getUserById" parameterType="int" resultType="com.zhangxin.tmall.pojo.User">
+        select * from user where id =#{id}
+    </select>
 </mapper>

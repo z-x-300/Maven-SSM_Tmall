@@ -20,5 +20,7 @@ public interface UserDao {
     public void deleteUserForAdmin(int id);
     //获取记录在数据库第几条，删除时需要使用
     public int getUserLocation(int id);
+    //根据用户id获取用户名
+    public User getUserById(Integer id);
 
 }

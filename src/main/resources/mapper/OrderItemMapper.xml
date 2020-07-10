@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zhangxin.tmall.dao.OrderItemDao">
+    <select id="getOrderItemByOrderId" parameterType="int" resultType="com.zhangxin.tmall.pojo.OrderItem">
+        select * from orderitem where orderid =#{orderId}
+    </select>
+
+</mapper>

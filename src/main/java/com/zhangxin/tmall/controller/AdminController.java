@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private OrderItemService orderItemService;
 
     @RequestMapping("/admin/showCategory.do")
     public ModelAndView showCategory(Integer start) {
@@ -263,7 +270,7 @@ public class AdminController {
 
     //修改商品
     @RequestMapping("/admin/updateProduct.do")
-    public ModelAndView updateProduct(Integer categoryId,Integer moTaiProductId,String productName,String productSubtitle,float productOrignalPrice,float productPromotePrice,Integer productStock,Integer start) {
+    public ModelAndView updateProduct(Integer categoryId, Integer moTaiProductId, String productName, String productSubtitle, float productOrignalPrice, float productPromotePrice, Integer productStock, Integer start) {
         Product product = new Product();
         product.setId(moTaiProductId);
         product.setName(productName);
@@ -279,7 +286,7 @@ public class AdminController {
 
     //删除商品
     @RequestMapping("/admin/deleteProduct.do")
-    public ModelAndView deleteProduct(Integer productId,Integer categoryId){
+    public ModelAndView deleteProduct(Integer productId, Integer categoryId) {
         productService.deleteProductByIdForAdmin(productId);
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/showProduct.do?&start=0" + "&categoryId=" + categoryId);
         return modelAndView;
@@ -287,41 +294,41 @@ public class AdminController {
 
     //根据productId显示FiveImage和sixImage
     @RequestMapping("/admin/showImages.do")
-    public ModelAndView showImages(Integer productId){
-        Product product =productService.getProductById(productId);
-        ModelAndView modelAndView=new ModelAndView();
-        modelAndView.addObject("product",product);
+    public ModelAndView showImages(Integer productId) {
+        Product product = productService.getProductById(productId);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("product", product);
         modelAndView.setViewName("forward:/admin/jsp/productImageManager.jsp");
         return modelAndView;
     }
 
     //添加5张图片
-    @RequestMapping(value= {"/admin/addFiveImage.do","post"})
-    public ModelAndView addFiveImage(Integer productId,Part picture,HttpServletRequest request){
+    @RequestMapping(value = {"/admin/addFiveImage.do", "post"})
+    public ModelAndView addFiveImage(Integer productId, Part picture, HttpServletRequest request) {
         //获取文件名
-        String pictureName =picture.getSubmittedFileName();
+        String pictureName = picture.getSubmittedFileName();
         System.out.println(pictureName);
         //定义最终保存的文件名
-        String fileName =null;
+        String fileName = null;
         //获取tomcat工作目录
-        String tomcatPath =request.getSession().getServletContext().getRealPath("upload");
+        String tomcatPath = request.getSession().getServletContext().getRealPath("upload");
         System.out.println(tomcatPath);
         //判断文件传来的格式
-        if(pictureName.endsWith(".jpg")) {
+        if (pictureName.endsWith(".jpg")) {
             fileName = System.currentTimeMillis() + ".jpg";
-        }else if(pictureName.endsWith(".png")) {
+        } else if (pictureName.endsWith(".png")) {
             fileName = System.currentTimeMillis() + ".png";
-        }else {
+        } else {
             ModelAndView modelAndView = new ModelAndView("redirect:/admin/showImages.do?message=error&productId=" + productId);
             return modelAndView;
         }
         //判断tomcat下的upload文件夹是否存在，若不存在就创建
         File tomcatPathFolder = new File(tomcatPath);
-        if(!tomcatPathFolder.exists()) {
+        if (!tomcatPathFolder.exists()) {
             tomcatPathFolder.mkdir();
         }
         //获取tomcat下upload文件下刚上传的图片
-        File tomcatPathFile = new File(tomcatPathFolder,fileName);
+        File tomcatPathFile = new File(tomcatPathFolder, fileName);
         //写入文件
         try {
             picture.write(tomcatPathFile.toString());
@@ -331,7 +338,7 @@ public class AdminController {
         }
         //上传完图片之后进行数据库中添加category
         String imageUrl = "/SSMTmall/upload/" + fileName;
-        fiveImageService.addFiveImageForAdmin(imageUrl,imageUrl,productId);
+        fiveImageService.addFiveImageForAdmin(imageUrl, imageUrl, productId);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/showImages.do?message=success&productId=" + productId);
         return modelAndView;
@@ -339,7 +346,7 @@ public class AdminController {
 
     //删除图片
     @RequestMapping("/admin/deleteFiveImage.do")
-    public ModelAndView deleteFiveImage(Integer id,Integer productId){
+    public ModelAndView deleteFiveImage(Integer id, Integer productId) {
         fiveImageService.deleteFiveImageForAdmin(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/showImages.do?productId=" + productId);
@@ -347,8 +354,8 @@ public class AdminController {
     }
 
     //增加sixImage
-    @RequestMapping(value= {"/admin/addSixImage.do","post"})
-    public ModelAndView addSixImageLittleImage(Integer productId,Part picture,HttpServletRequest request) {
+    @RequestMapping(value = {"/admin/addSixImage.do", "post"})
+    public ModelAndView addSixImageLittleImage(Integer productId, Part picture, HttpServletRequest request) {
         //获取文件名
         String pictureName = picture.getSubmittedFileName();
         System.out.println(pictureName);
@@ -358,21 +365,21 @@ public class AdminController {
         String tomcatPath = request.getSession().getServletContext().getRealPath("upload");
         System.out.println(tomcatPath);
         //判断文件传来的格式起对应的后缀名
-        if(pictureName.endsWith(".jpg")) {
+        if (pictureName.endsWith(".jpg")) {
             fileName = System.currentTimeMillis() + ".jpg";
-        }else if(pictureName.endsWith(".png")) {
+        } else if (pictureName.endsWith(".png")) {
             fileName = System.currentTimeMillis() + ".png";
-        }else {
+        } else {
             ModelAndView mav = new ModelAndView("redirect:/admin/showImages.do?message=error&productId=" + productId);
             return mav;
         }
         //判断tomcat下的upload文件夹是否存在，若不存在就创建
         File tomcatPathFolder = new File(tomcatPath);
-        if(!tomcatPathFolder.exists()) {
+        if (!tomcatPathFolder.exists()) {
             tomcatPathFolder.mkdir();
         }
         //获取tomcat下的upload下的刚上传的那个图片
-        File tomcatPathFile = new File(tomcatPathFolder,fileName);
+        File tomcatPathFile = new File(tomcatPathFolder, fileName);
         //写入文件
         try {
             picture.write(tomcatPathFile.toString());
@@ -382,7 +389,7 @@ public class AdminController {
         }
         //上传完图片之后进行数据库中添加category
         String imageUrl = "/SSMTmall/upload/" + fileName;
-        sixImageService.addSixImageForAdmin(imageUrl,productId);
+        sixImageService.addSixImageForAdmin(imageUrl, productId);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/admin/showImages.do?message=success&productId=" + productId);
         return mav;
@@ -390,7 +397,7 @@ public class AdminController {
 
     //删除sixImage
     @RequestMapping("/admin/deleteSixImage.do")
-    public ModelAndView deleteSixImage(Integer id,Integer productId) {
+    public ModelAndView deleteSixImage(Integer id, Integer productId) {
         sixImageService.deleteSixImageByIdForAdmin(id);
         ModelAndView mav = new ModelAndView();
         mav.setViewName("redirect:/admin/showImages.do?productId=" + productId);
@@ -399,18 +406,18 @@ public class AdminController {
 
     //显示商品属性和属性值
     @RequestMapping("/admin/propertyValueManage.do")
-    public ModelAndView showPropertyValue(Integer categoryId,Integer productId){
+    public ModelAndView showPropertyValue(Integer categoryId, Integer productId) {
         //获取属性
-        List<Property> propertyList =propertyService.getPropertyByCategoryId(categoryId);
+        List<Property> propertyList = propertyService.getPropertyByCategoryId(categoryId);
         //获取属性值
-        List<PropertyValue> propertyValueList =propertyValueService.getAllPropertyValueByProductIdForAdmin(productId);
+        List<PropertyValue> propertyValueList = propertyValueService.getAllPropertyValueByProductIdForAdmin(productId);
         //获取商品
-        Product product =productService.getProductById(productId);
+        Product product = productService.getProductById(productId);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("categoryId",categoryId);
-        modelAndView.addObject("properties",propertyList);
-        modelAndView.addObject("propertyValues",propertyValueList);
-        modelAndView.addObject("product",product);
+        modelAndView.addObject("categoryId", categoryId);
+        modelAndView.addObject("properties", propertyList);
+        modelAndView.addObject("propertyValues", propertyValueList);
+        modelAndView.addObject("product", product);
         modelAndView.setViewName("forward:/admin/jsp/propertyValueManager.jsp");
         return modelAndView;
 
@@ -418,19 +425,19 @@ public class AdminController {
 
     //添加/修改属性值
     @RequestMapping("/admin/updatePropertyValue.do")
-    public ModelAndView updatePropertyValue(Integer categoryId,Integer productId,Integer[] propertyId,String[] value){
-     Integer [] propertyIds= propertyId;
-     String [] values =value;
-     //进行添加或修改
-      for (int i=0;i<propertyIds.length;i++){
-          PropertyValue propertyValue =propertyValueService.getPropertyValueByProductIdAndPropertyIdForAdmin(productId,propertyIds[i]);
-          //如果没有属性就添加，否则修改
-          if (propertyValue==null){
-              propertyValueService.addPropertyValueForAdmin(productId,propertyIds[i],values[i]);
-          }else {
-              propertyValueService.updatePropertyValueForAdmin(productId,propertyIds[i],values[i]);
-          }
-      }
+    public ModelAndView updatePropertyValue(Integer categoryId, Integer productId, Integer[] propertyId, String[] value) {
+        Integer[] propertyIds = propertyId;
+        String[] values = value;
+        //进行添加或修改
+        for (int i = 0; i < propertyIds.length; i++) {
+            PropertyValue propertyValue = propertyValueService.getPropertyValueByProductIdAndPropertyIdForAdmin(productId, propertyIds[i]);
+            //如果没有属性就添加，否则修改
+            if (propertyValue == null) {
+                propertyValueService.addPropertyValueForAdmin(productId, propertyIds[i], values[i]);
+            } else {
+                propertyValueService.updatePropertyValueForAdmin(productId, propertyIds[i], values[i]);
+            }
+        }
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/admin/propertyValueManage.do?productId=" + productId + "&categoryId=" + categoryId);
         return modelAndView;
@@ -438,42 +445,42 @@ public class AdminController {
 
     //查询所有用户
     @RequestMapping("/admin/showUser.do")
-    public ModelAndView showUser(Integer start){
+    public ModelAndView showUser(Integer start) {
 //获取总数
         List<User> userList = userService.getAllUserForAdmin();
         PageInfo<User> pageInfo = new PageInfo<User>(userList);
         int total = (int) pageInfo.getTotal();
         //判断边界
-        if(start > total) {
+        if (start > total) {
             start = total / 5 * 5;
         }
-        if(start == total) {
+        if (start == total) {
             //（90为9，所以要减一）
             start = (total / 5 - 1) * 5;
         }
-        if(start <= 0) {
+        if (start <= 0) {
             //判断最小边界
             start = 0;
         }
-        PageHelper.offsetPage(start,5);
+        PageHelper.offsetPage(start, 5);
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("users",userList);
-        modelAndView.addObject("start",start);
-        modelAndView.addObject("total",total);
+        modelAndView.addObject("users", userList);
+        modelAndView.addObject("start", start);
+        modelAndView.addObject("total", total);
         modelAndView.setViewName("forward:/admin/jsp/userManager.jsp");
         return modelAndView;
     }
 
     //修改用户名
     @RequestMapping("/admin/updateUserName.do")
-    public ModelAndView updateUserName(Integer userId,String userName,Integer start){
-       //判断用户名是否重复
-        User user =userService.getUserByUserName(userName);
-        if (user!=null){
+    public ModelAndView updateUserName(Integer userId, String userName, Integer start) {
+        //判断用户名是否重复
+        User user = userService.getUserByUserName(userName);
+        if (user != null) {
             ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?message=error&start=" + start);
             return modelAndView;
-        }else {
-            userService.updateUserNameForAdmin(userId,userName);
+        } else {
+            userService.updateUserNameForAdmin(userId, userName);
             ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
             return modelAndView;
         }
@@ -482,24 +489,96 @@ public class AdminController {
 
     //修改密码
     @RequestMapping("/admin/updateUserPassword.do")
-    public ModelAndView updatePassword(Integer userId,String userPassword,Integer start){
-        userService.updatePasswordForAdmin(userId,userPassword);
+    public ModelAndView updatePassword(Integer userId, String userPassword, Integer start) {
+        userService.updatePasswordForAdmin(userId, userPassword);
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
         return modelAndView;
     }
 
     //删除用户
     @RequestMapping("/admin/deleteUser.do")
-    public ModelAndView deleteUser(Integer userId){
+    public ModelAndView deleteUser(Integer userId) {
         int start = userService.getUserLocation(userId);
         userService.deleteUserForAdmin(userId);
         start = userId / 5 * 5;
-        if(userId % 5 != 0) {
+        if (userId % 5 != 0) {
             start = userId / 5 * 5;
-        }else {
+        } else {
             start = (userId / 5 - 1) * 5;
         }
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/showUser.do?&start=" + start);
+        return modelAndView;
+    }
+
+    //获取所有订单信息
+    @RequestMapping("/admin/showOrder.do")
+    public ModelAndView showOrder(Integer start) {
+        //获取总数
+        List<Order> list = orderService.getAllOrderByAdmin();
+        PageInfo<Order> pageInfo = new PageInfo<Order>(list);
+        int total = (int) pageInfo.getTotal();
+        //判断边界
+        if (start > total) {
+            start = total / 5 * 5;
+        }
+        if (start == total) {
+            //（90为9，所以要减一）
+            start = (total / 5 - 1) * 5;
+        }
+        if (start <= 0) {
+            //判断最小边界
+            start = 0;
+        }
+        PageHelper.offsetPage(start, 5);
+        List<Order> orders = orderService.getAllOrderByAdmin();
+        //设置二维集合保存orders中对应的orderItem
+        List<List<OrderItem>> orderItems = new ArrayList<List<OrderItem>>();
+        for (int i = 0; i < orders.size(); i++) {
+            List<OrderItem> orderItemList = orderItemService.getOrderItemByOrderId(orders.get(i).getId());
+            orderItems.add(orderItemList);
+        }
+        //根据orderId获取user
+        List<User> users = new ArrayList<User>();
+        for (int i = 0; i < orders.size(); i++) {
+            User user = userService.getUserById(orders.get(i).getUserId());
+            users.add(user);
+        }
+        //获取订单项中所对应的商品集合
+        List<List<Product>> products = new ArrayList<List<Product>>();
+        for (int i = 0; i < orderItems.size(); i++) {
+            List<Product> productList = new ArrayList<Product>();
+            //根据orderItem获取product
+            for (int j = 0; j < orderItems.get(i).size(); j++) {
+                Product product = productService.getProductById(orderItems.get(i).get(j).getProductId());
+                productList.add(product);
+            }
+            products.add(productList);
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("users", users);
+        modelAndView.addObject("orders", orders);
+        modelAndView.addObject("orderItems", orderItems);
+        modelAndView.addObject("products", products);
+        modelAndView.addObject("start", start);
+        modelAndView.addObject("total", total);
+        modelAndView.setViewName("forward:/admin/jsp/orderManager.jsp");
+        return modelAndView;
+    }
+
+    //发货
+    @RequestMapping("/admin/orderDeliverGoods.do")
+    public ModelAndView orderDeliverGoods(Integer orderId) {
+        String status = "待收货";
+        Date date = new Date();
+        orderService.updateStatusAndDeliverDateById(orderId, status, date);
+        int start = orderId / 5 * 5;
+        if (orderId % 5 != 0) {
+            start = orderId / 5 * 5;
+        } else {
+            start = (orderId / 5 - 1) * 5;
+        }
+
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/showOrder.do?&start=" + start + "&message=" + orderId);
         return modelAndView;
     }
 }
