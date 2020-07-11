@@ -16,4 +16,7 @@
     <update id="updatePropertyValueForAdmin">
        update propertyvalue set value = #{value} where productid = #{productId} and propertyId = #{propertyId}
     </update>
+    <select id="getPropertyValueByProductId" parameterType="int" resultType="com.zhangxin.tmall.pojo.PropertyValue">
+       select * from propertyvalue where productid = #{productId}
+    </select>
 </mapper>

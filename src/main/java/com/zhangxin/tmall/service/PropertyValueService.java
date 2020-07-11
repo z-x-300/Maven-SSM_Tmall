@@ -13,4 +13,6 @@ public interface PropertyValueService {
     public void addPropertyValueForAdmin(int productId,int propertyId, String value);
     //修改属性值
     public void updatePropertyValueForAdmin(int productId,int propertyId,String value);
+    //根据商品id获取属性值
+    public List<PropertyValue> getPropertyValueByProductId(int productId);
 }
