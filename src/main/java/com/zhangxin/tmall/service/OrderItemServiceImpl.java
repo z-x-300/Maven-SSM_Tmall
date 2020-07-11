@@ -18,4 +18,10 @@ public class OrderItemServiceImpl implements OrderItemService{
         List<OrderItem> orderItemList =orderItemDao.getOrderItemByOrderId(orderId);
         return orderItemList;
     }
+
+    //根据用户名获取orderitem
+    public List<OrderItem> getOrderItemByUserId(int userId){
+       List<OrderItem> orderItemList =orderItemDao.getOrderItemByUserId(userId);
+        return orderItemList;
+    }
 }

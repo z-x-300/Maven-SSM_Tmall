@@ -21,8 +21,8 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/search.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/navigation.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/search.jsp"></jsp:include>
 	
 	<!-- 设置令牌值，防止刷新页面导致表单重复提交 -->
 	<c:set var="session_uuid" value="uuid" scope="session"></c:set>
@@ -202,8 +202,8 @@
         		<input type="text" placeholder="密码" class="inputJS" id="passwordJS">
       		</div>
       		<div id="tis">
-        		<div id="leftFlow"><a href="${pageContext.request.contextPath}/WEB-INF/jsp/anotherPage/findPassword.jsp">忘记登陆密码</a></div>
-        		<div id="rightFlow"><a href="${pageContext.request.contextPath}/WEB-INF/jsp/anotherPage/register.jsp">免费注册</a></div>
+        		<div id="leftFlow"><a href="${pageContext.request.contextPath}/jsp/anotherPage/findPassword.jsp">忘记登陆密码</a></div>
+        		<div id="rightFlow"><a href="${pageContext.request.contextPath}/jsp/anotherPage/register.jsp">免费注册</a></div>
       		</div>
       		<div style="clear:both"></div>
       		<button class="btn btn-block redButton" id="moTaiLogin">登陆</button>
@@ -212,8 +212,8 @@
     </div>
 </div>
 	
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerOne.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerTwo.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerOne.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerTwo.jsp"></jsp:include>
 
 	<script src="${pageContext.request.contextPath}/js/productPage/productPage.js"></script>
 	<script src="${pageContext.request.contextPath}/js/productPage/motaikuang.js"></script>

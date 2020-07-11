@@ -18,8 +18,8 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/search.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/navigation.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/search.jsp"></jsp:include>
 
 <div id="background">
 	<div id="head">
@@ -83,8 +83,8 @@
 </div>
 </div>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerOne.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerTwo.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerOne.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerTwo.jsp"></jsp:include>
 
 	<script src="${pageContext.request.contextPath}/js/anotherPage/myOrder.js"></script>
 	

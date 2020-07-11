@@ -19,8 +19,8 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/search.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/navigation.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/search.jsp"></jsp:include>
 
 <div id="background">
 <form action="${pageContext.request.contextPath}/orderItem/payForShoppingCart.do" method="get">
@@ -106,8 +106,8 @@
 	</form>
 </div>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerOne.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerTwo.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerOne.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerTwo.jsp"></jsp:include>
 	
 	<script src="${pageContext.request.contextPath}/js/publicPage/footerOne.js"></script>
 	<script src="${pageContext.request.contextPath}/js/publicPage/footerTwo.js"></script>

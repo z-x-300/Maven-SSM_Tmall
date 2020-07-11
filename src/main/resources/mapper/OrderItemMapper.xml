@@ -7,5 +7,7 @@
     <select id="getOrderItemByOrderId" parameterType="int" resultType="com.zhangxin.tmall.pojo.OrderItem">
         select * from orderitem where orderid =#{orderId}
     </select>
-
+    <select id="getOrderItemByUserId" parameterType="int" resultType="com.zhangxin.tmall.pojo.OrderItem">
+        select *from orderitem where userid =#{userId}
+    </select>
 </mapper>

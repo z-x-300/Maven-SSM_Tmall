@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,15 +17,12 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/search.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/navigation.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/search.jsp"></jsp:include>
 
-	<form action="${pageContext.request.contextPath}/order/addOrderForShoppingCart.do" method="get">
-	<c:forEach items="${orderItems}" var="orderItem">
-		<input type="hidden" value="${orderItem.id}" name="orderItemId">
-	</c:forEach>	
-	<input type="hidden" value="<fmt:formatNumber type="number" value="${totalMoney}" pattern="0.00" maxFractionDigits="2"/>" name="totalMoney">
-	
+	<form action="${pageContext.request.contextPath}/order/addOrder.do" method="post">
+	<input type="hidden" value="${orderItem.id}" name="orderItemId">
+	<input type="hidden" value="<fmt:formatNumber value="${product.promotePrice * number}" pattern="0.00" maxFractionDigits="2"/>" name="totalMoney" type="number">
 	<div align="center">
 		<div id="picture">
 			<img src="${pageContext.request.contextPath}/image/anotherPage/simpleLogo.png">
@@ -73,13 +69,12 @@
 				</tr>
 			</thead>
 			<tbody>
-			<c:forEach items="${orderItems}" var="orderItem" varStatus="status">
 				<tr>
 					<td width="50%">
-						<img src="${products[status.count-1].fiveImages[0].bigImageUri}" class="orderPic">
+						<img src="${product.fiveImages[0].littleImageUri}" class="orderPic">
 						<div class="detailOrder">
 							<span>
-							<a href="">${products[status.count-1].name}</a>
+							<a href="${pageContext.request.contextPath}/product/showProduct.do?productId=${product.id}">${product.name}</a>
 							</span><br>
 							<span class="littlePic">
 								<img src="${pageContext.request.contextPath}/image/anotherPage/creditcard.png" title="支持信用卡支付" class="orderProductInfo">
@@ -88,9 +83,9 @@
 							</span>
 						</div>
 					</td>
-					<td width="10%"><fmt:formatNumber value="${products[status.count-1].promotePrice}" pattern="0.00" maxFractionDigits="2"/></td>
-					<td width="5%">${orderItem.number}</td>
-					<td class="orderUnitSum" width="10%"><fmt:formatNumber type="number" value="${products[status.count-1].promotePrice * orderItem.number}" pattern="0.00" maxFractionDigits="2"/></td>
+					<td width="10%"><fmt:formatNumber type="number" value="${product.promotePrice}" pattern="0.00" maxFractionDigits="2"/></td>
+					<td width="5%">${number}</td>
+					<td class="orderUnitSum" width="10%"><fmt:formatNumber type="number" value="${product.promotePrice * number}" pattern="0.00" maxFractionDigits="2"/></td>
 					<td width="25%">
 						<label>
 							<input type="radio" checked="checked" value="">普通配送
@@ -100,7 +95,6 @@
 						</select>
 					</td>
 				</tr>
-				</c:forEach>
 			</tbody>
 		</table>
 	</div>
@@ -108,7 +102,7 @@
 		<div id="leavingMessage">
 			给卖家留言:
 			<img src="${pageContext.request.contextPath}/image/anotherPage/leaveMessage.png" id="leavePic">
-			<div class="flowright">店铺合计(含运费):<fmt:formatNumber type="number" value="${totalMoney}" pattern="0.00" maxFractionDigits="2"/></div>
+			<div class="flowright">店铺合计(含运费):<fmt:formatNumber type="number" value="${product.promotePrice * number}" pattern="0.00" maxFractionDigits="2"/></div>
 			<div id="showNone">
 				<textarea style="display:block" name="userMessage"></textarea>
 				<div>还可以输入200个字符</div>
@@ -116,7 +110,7 @@
 		</div>
 		<div style="clear:both;"></div>
 		<div id="realLeavingMessage">
-			<div class="flowright">实付款：<span id="money"><fmt:formatNumber type="number" value="${totalMoney}" pattern="0.00" maxFractionDigits="2"/></span></div>
+			<div class="flowright">实付款：<span id="money"><fmt:formatNumber type="number" value="${product.promotePrice * number}" pattern="0.00" maxFractionDigits="2"/></span></div>
 			<div style="clear:both"></div>	
 		<div>
 			<button>提交订单</button>
@@ -125,10 +119,11 @@
 	</div>
 	</form>
 	
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerOne.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerTwo.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerOne.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerTwo.jsp"></jsp:include>
 	
 	<script src="${pageContext.request.contextPath}/js/anotherPage/settlement.js"></script>
+	
 	<script src="${pageContext.request.contextPath}/js/publicPage/footerOne.js"></script>
 	<script src="${pageContext.request.contextPath}/js/publicPage/footerTwo.js"></script>
 	

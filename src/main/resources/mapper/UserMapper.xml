@@ -25,4 +25,13 @@
     <select id="getUserById" parameterType="int" resultType="com.zhangxin.tmall.pojo.User">
         select * from user where id =#{id}
     </select>
+    <select id="getUserByNameAndPassword" resultType="com.zhangxin.tmall.pojo.User">
+        select * from user where name =#{name} and password =#{password}
+    </select>
+    <update id="updateLoginDate">
+        update user set logintime =#{loginTime} where id =#{id}
+    </update>
+    <insert id="insertUser" parameterType="com.zhangxin.tmall.pojo.User">
+        insert into user values(null,#{name},#{password},null)
+    </insert>
 </mapper>

@@ -5,6 +5,7 @@ import com.zhangxin.tmall.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,5 +47,20 @@ public class UserServiceImpl implements UserService {
     //根据用户id获取用户名
     public User getUserById(Integer id){
         return userDao.getUserById(id);
+    }
+
+    //根据用户名密码查询（登录）
+    public User getUserByNameAndPassword(String name, String password){
+        User user =userDao.getUserByNameAndPassword(name,password);
+        return user;
+    }
+    //修改登录时间
+    public void updateLoginDate(int id, Date loginTime){
+        userDao.updateLoginDate(id,loginTime);
+    }
+
+    //添加用户（注册）
+    public void insertUser(User user){
+        userDao.insertUser(user);
     }
 }

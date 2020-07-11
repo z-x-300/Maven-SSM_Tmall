@@ -3,6 +3,7 @@ package com.zhangxin.tmall.service;
 import com.zhangxin.tmall.pojo.User;
 
 
+import java.util.Date;
 import java.util.List;
 
 public interface UserService {
@@ -21,4 +22,10 @@ public interface UserService {
     public int getUserLocation(int id);
     //根据用户id获取用户名
     public User getUserById(Integer id);
+    //根据用户名密码查询（登录）
+    public User getUserByNameAndPassword(String name, String password);
+    //修改登录时间
+    public void updateLoginDate(int id,Date loginTime);
+    //添加用户（注册）
+    public void insertUser(User user);
 }

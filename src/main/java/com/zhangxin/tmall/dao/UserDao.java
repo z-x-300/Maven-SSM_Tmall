@@ -4,6 +4,7 @@ import com.zhangxin.tmall.pojo.User;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -22,5 +23,11 @@ public interface UserDao {
     public int getUserLocation(int id);
     //根据用户id获取用户名
     public User getUserById(Integer id);
+    //根据用名户密码查询（登录）
+    public User getUserByNameAndPassword(@Param("name") String name,@Param("password") String password);
+    //修改登录时间
+    public void updateLoginDate(@Param("id") int id,@Param("loginTime") Date loginTime);
+    //添加用户（注册）
+    public void insertUser(User user);
 
 }

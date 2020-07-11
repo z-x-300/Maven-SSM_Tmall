@@ -35,10 +35,10 @@
 				</div>
 				<div id="tis">
 					<div id="leftFlow">
-						<a href="${pageContext.request.contextPath}/WEB-INF/jsp/anotherPage/findPassword.jsp">忘记登陆密码</a>
+						<a href="${pageContext.request.contextPath}/jsp/anotherPage/findPassword.jsp">忘记登陆密码</a>
 					</div>
 					<div id="rightFlow">
-						<a href="${pageContext.request.contextPath}/WEB-INF/jsp/anotherPage/register.jsp">免费注册</a>
+						<a href="${pageContext.request.contextPath}/jsp/anotherPage/register.jsp">免费注册</a>
 					</div>
 				</div>
 				<div style="clear: both"></div>

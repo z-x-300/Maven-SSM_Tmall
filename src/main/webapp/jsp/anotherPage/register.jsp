@@ -18,8 +18,8 @@
 </head>
 <body>
 
-	<jsp:include page="/WEB-INF/jsp/publicPage/navigation.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/search.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/navigation.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/search.jsp"></jsp:include>
 
 	<div id="backgroundPic">
 		<img src="${pageContext.request.contextPath}/image/anotherPage/login/loginBackground.png">
@@ -43,11 +43,11 @@
 				</div>
 				<div class="rightDiv">登陆时验证,保护账号信息</div>
 				<div class="rightDiv">
-					<input type="text" placeholder="设置你的登陆密码" id="secondInput"
+					<input type="password" placeholder="设置你的登陆密码" id="secondInput"
 						name="password1">
 				</div>
 				<div class="rightDiv">
-					<input type="text" placeholder="请再次输入你的密码" id="thirdInput"
+					<input type="password" placeholder="请再次输入你的密码" id="thirdInput"
 						name="password2">
 				</div>
 			</div>
@@ -56,8 +56,8 @@
 		</div>
 	</form>
 	
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerOne.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/jsp/publicPage/footerTwo.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerOne.jsp"></jsp:include>
+	<jsp:include page="/jsp/publicPage/footerTwo.jsp"></jsp:include>
 
 	<script src="${pageContext.request.contextPath}/js/anotherPage/register.js"></script>
 	<script src="${pageContext.request.contextPath}/js/publicPage/footerOne.js"></script>
