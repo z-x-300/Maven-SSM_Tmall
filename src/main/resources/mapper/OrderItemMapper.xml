@@ -10,4 +10,28 @@
     <select id="getOrderItemByUserId" parameterType="int" resultType="com.zhangxin.tmall.pojo.OrderItem">
         select *from orderitem where userid =#{userId}
     </select>
+    <select id="getOrderItemByProductIdAndUserId" resultType="com.zhangxin.tmall.pojo.OrderItem">
+        select * from orderitem where productid = #{productId} and userid = #{userId} and orderid is null
+    </select>
+    <insert id="addOrderItem" parameterType="com.zhangxin.tmall.pojo.OrderItem">
+        insert into orderItem values(null,#{number},#{productId},#{orderId},#{userId})
+    </insert>
+    <update id="updateOrderItem" parameterType="com.zhangxin.tmall.pojo.OrderItem">
+        update orderitem
+        <set>
+            <if test="number != null and number != ''">
+                number = #{number},
+            </if>
+            <if test="productId != null and productId != ''">
+                productid = #{productId},
+            </if>
+            <if test="orderId != null and orderId != ''">
+                orderid = #{orderId},
+            </if>
+            <if test="userId != null and userId != ''">
+                userId = #{userId}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

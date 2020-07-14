@@ -199,7 +199,7 @@
        			<span id="passwordGlyphicon">
           			<span class="glyphicon glyphicon-lock"></span>
         		</span>
-        		<input type="text" placeholder="密码" class="inputJS" id="passwordJS">
+        		<input type="password" placeholder="密码" class="inputJS" id="passwordJS">
       		</div>
       		<div id="tis">
         		<div id="leftFlow"><a href="${pageContext.request.contextPath}/jsp/anotherPage/findPassword.jsp">忘记登陆密码</a></div>

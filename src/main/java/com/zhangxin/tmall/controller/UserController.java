@@ -7,6 +7,7 @@ import com.zhangxin.tmall.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,6 +81,27 @@ public class UserController {
                 modelAndView.setViewName("anotherPage/successRegister");
                 return modelAndView;
             }
+        }
+    }
+
+    //模态框的登录
+    @RequestMapping("/user/moTaiLogin.do")
+    @ResponseBody
+    public String UserMoTaiLogin(String name,String password,HttpServletRequest request) {
+        User user = userService.getUserByNameAndPassword(name,password);
+        if(user != null) {
+            //修改登录时间
+            userService.updateLoginDate(user.getId(),new Date());
+            HttpSession session = request.getSession();
+            session.setAttribute("user",user);
+            //更新购物车数量
+            session.removeAttribute("orderItemNumber");
+            List<OrderItem> orderItem2 = orderItemService.getOrderItemByUserId(user.getId());
+            int orderItemNumber = orderItem2.size();
+            session.setAttribute("orderItemNumber",orderItemNumber);
+            return null;
+        }else {
+            return "error";
         }
     }
 }

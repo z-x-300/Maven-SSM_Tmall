@@ -24,4 +24,18 @@ public class OrderItemServiceImpl implements OrderItemService{
        List<OrderItem> orderItemList =orderItemDao.getOrderItemByUserId(userId);
         return orderItemList;
     }
+
+    //根据productId 和userId 查询orderItem
+    public OrderItem getOrderItemByProductIdAndUserId(int productId,int userId){
+        OrderItem orderItem=orderItemDao.getOrderItemByProductIdAndUserId(productId,userId);
+        return orderItem;
+    }
+    //添加orderItem
+    public void addOrderItem(OrderItem orderItem){
+        orderItemDao.addOrderItem(orderItem);
+    }
+    //更新orderItem
+    public void updateOrderItem(OrderItem orderItem){
+        orderItemDao.updateOrderItem(orderItem);
+    }
 }
