@@ -34,4 +34,7 @@
     <insert id="insertUser" parameterType="com.zhangxin.tmall.pojo.User">
         insert into user values(null,#{name},#{password},null)
     </insert>
+    <select id="getUserByName" parameterType="String" resultType="com.zhangxin.tmall.pojo.User">
+        select *from user where name=#{name}
+    </select>
 </mapper>

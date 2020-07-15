@@ -33,6 +33,7 @@ public class ProductController {
     private ReviewService reviewService;
 
 
+    //获取商品并显示
     @RequestMapping("/product/showProduct.do")
     public ModelAndView showProduct(Integer productId){
         //获取商品信息
@@ -59,4 +60,6 @@ public class ProductController {
         return modelAndView;
 
     }
+
+
 }

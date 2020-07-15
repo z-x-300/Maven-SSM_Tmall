@@ -104,4 +104,25 @@ public class UserController {
             return "error";
         }
     }
+
+    //用户退出，清除掉session
+    @RequestMapping("/user/logout.do")
+    public String userLogout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.removeAttribute("user");
+        return "redirect:/index.jsp";
+    }
+
+    //找回密码
+    @RequestMapping(value="/user/findPassword.do",produces="text/plain;charset=utf-8")
+    @ResponseBody
+    public String userFindPassword(String name) {
+        User user = userService.getUserByName(name);
+        if(user != null) {
+            String password = user.getPassword();
+            return password;
+        }else {
+            return "NotExist";
+        }
+    }
 }

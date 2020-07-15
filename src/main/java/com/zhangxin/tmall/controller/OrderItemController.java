@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -106,6 +107,80 @@ public class OrderItemController {
         int orderItemNumber = orderItem2.size();
         session.setAttribute("orderItemNumber",orderItemNumber);
         return "AddToShoppingCartSuccessful";
+    }
+
+
+    //显示购物车
+    @RequestMapping("/orderItem/showShoppingCart.do")
+    public ModelAndView showShoppingCart(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        //查询此用户下的订单项
+        List<OrderItem> orderItems = orderItemService.getOrderItemByUserId(user.getId());
+        //根据订单项查询出product集合
+        List<Product> products = new ArrayList<Product>();
+        for(int i = 0;i < orderItems.size();i++) {
+            Product product = productService.getProductById(orderItems.get(i).getProductId());
+            products.add(product);
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("orderItems",orderItems);
+        modelAndView.addObject("products",products);
+        modelAndView.setViewName("/anotherPage/shoppingCart");
+        return modelAndView;
+    }
+
+    //购物车付款
+    @RequestMapping("/orderItem/payForShoppingCart.do")
+    public ModelAndView payForShoppingCart(Integer[] orderItemId,Integer[] inputNumberValue) {
+        Integer[] orderItemIds = orderItemId;
+        Integer[] inputNumberValues = inputNumberValue;
+        //根据orderItemIds修改对应的number值
+        for(int i = 0;i < orderItemIds.length;i++) {
+            orderItemService.updateNumberById(orderItemIds[i],inputNumberValues[i]);
+        }
+        //获取orderItem的数组
+        OrderItem[] orderItems = new OrderItem[orderItemIds.length];
+        for(int i = 0;i < orderItemIds.length;i++) {
+            orderItems[i] = orderItemService.getOrderItemById(orderItemIds[i]);
+        }
+        //根据orderIds获取products
+        List<Product> products = new ArrayList<Product>();
+        for(int i = 0;i < orderItems.length;i++) {
+            int productId = orderItems[i].getProductId();
+            Product product = productService.getProductById(productId);
+            products.add(product);
+        }
+        //获取价格总数
+        float totalMoney = 0;
+        for(int i = 0;i < orderItems.length;i++) {
+            int number = orderItems[i].getNumber();
+            float money = products.get(i).getPromotePrice();
+            totalMoney = totalMoney + number * money;
+        }
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("orderItems",orderItems);
+        modelAndView.addObject("products",products);
+        modelAndView.addObject("totalMoney",totalMoney);
+        modelAndView.setViewName("anotherPage/forebuy");
+        return modelAndView;
+    }
+
+
+    //删除购物车的商品
+    @RequestMapping("/orderItem/deleteFromShoppingCart.do")
+    public ModelAndView deleteFormShoppingCart(Integer orderItemId,HttpServletRequest request) {
+        //根据id删除订单项
+        orderItemService.deleteOrderItemById(orderItemId);
+        //更新购物车数量
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        session.removeAttribute("orderItemNumber");
+        List<OrderItem> orderItem2 = orderItemService.getOrderItemByUserId(user.getId());
+        int orderItemNumber = orderItem2.size();
+        session.setAttribute("orderItemNumber",orderItemNumber);
+        ModelAndView modelAndView = new ModelAndView("redirect:/orderItem/showShoppingCart.do");
+        return modelAndView;
     }
 
 }

@@ -29,5 +29,7 @@ public interface UserDao {
     public void updateLoginDate(@Param("id") int id,@Param("loginTime") Date loginTime);
     //添加用户（注册）
     public void insertUser(User user);
+    //根据用户名查询用户（找回密码使用）
+    public User getUserByName(String name);
 
 }

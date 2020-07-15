@@ -63,4 +63,10 @@ public class UserServiceImpl implements UserService {
     public void insertUser(User user){
         userDao.insertUser(user);
     }
+
+    //根据用户名查询用户（找回密码使用）
+    public User getUserByName(String name){
+        User user =userDao.getUserByName(name);
+        return user;
+    }
 }

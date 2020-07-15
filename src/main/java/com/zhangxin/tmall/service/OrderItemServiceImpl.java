@@ -38,4 +38,18 @@ public class OrderItemServiceImpl implements OrderItemService{
     public void updateOrderItem(OrderItem orderItem){
         orderItemDao.updateOrderItem(orderItem);
     }
+
+    //更新orderItem数量
+    public void updateNumberById(int id,int number){
+        orderItemDao.updateNumberById(id,number);
+    }
+    //根据id获取orderItem
+    public OrderItem getOrderItemById(int id){
+        OrderItem orderItem =orderItemDao.getOrderItemById(id);
+        return orderItem;
+    }
+    //删除orderItem
+    public void deleteOrderItemById(int id){
+        orderItemDao.deleteOrderItemById(id);
+    }
 }

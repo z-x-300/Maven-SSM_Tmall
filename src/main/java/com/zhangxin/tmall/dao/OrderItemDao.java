@@ -19,5 +19,11 @@ public interface OrderItemDao {
     public void addOrderItem(OrderItem orderItem);
     //更新orderItem
     public void updateOrderItem(OrderItem orderItem);
+    //更新orderItem数量
+    public void updateNumberById(@Param("id") int id,@Param("number") int number);
+    //根据id获取orderItem
+    public OrderItem getOrderItemById(int id);
+    //删除orderItem
+    public void deleteOrderItemById(int id);
 
 }
