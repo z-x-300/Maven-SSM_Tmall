@@ -13,4 +13,13 @@
     <update id="updateDeliverDateById">
         update order_ set deliverdate = #{deliverDate} where id = #{id}
     </update>
+    <insert id="addOrder" parameterType="com.zhangxin.tmall.pojo.Order" useGeneratedKeys="true" keyProperty="id">
+        insert into order_ values(null,#{orderCode},#{address},#{post},#{receiver},#{mobile},#{userMessage},#{createDate},#{payDate},#{deliverDate},#{confirmDate},#{status},#{userId})
+    </insert>
+    <select id="getOrderById" parameterType="int" resultType="com.zhangxin.tmall.pojo.Order">
+        select * from order_ where id=#{id}
+    </select>
+    <update id="updatePayDateById">
+    		update order_ set paydate = #{payDate} where id = #{id}
+    	</update>
 </mapper>

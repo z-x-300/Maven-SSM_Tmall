@@ -15,4 +15,8 @@ public interface ProductService {
     public void deleteProductByIdForAdmin(int id);
     //根据id获取商品（映射fiveImage/sixImage）
     public Product getProductById(int id);
+    //根据id修改库存和月销量
+    public void updateStockAndSaleCountById(int id,int number);
+    //库存不足自动添加库存
+    public void updateStockById(int id);
 }

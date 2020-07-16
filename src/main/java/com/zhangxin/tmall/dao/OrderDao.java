@@ -15,5 +15,11 @@ public interface OrderDao {
     public void updateStatusById(@Param("id") int id, @Param("status") String status);
     //根据id修改订单发货日期
     public void updateDeliverDateById(@Param("id") int id,@Param("deliverDate") Date deliverDate);
+    //添加一个订单
+    public void addOrder(Order order);
+    //根据orderId查询order
+    public Order getOrderById(int id);
+    //根据id修改payDate
+    public void updatePayDateById(@Param("id") int id,@Param("payDate") Date payDate);
 
 }

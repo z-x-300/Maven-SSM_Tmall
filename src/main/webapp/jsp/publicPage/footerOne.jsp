@@ -25,7 +25,7 @@
 		<div class="a">
 			<span>手机天猫</span>
 			<div id="ma">
-				<img src="${pageContext.request.contextPath}/image/publicPage/ma.jpg">
+				<img src="${pageContext.request.contextPath}/image/publicPage/ma.png">
 			</div>
 		</div>
 	</div>

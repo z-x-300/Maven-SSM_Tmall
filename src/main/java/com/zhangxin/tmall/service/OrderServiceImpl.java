@@ -1,7 +1,9 @@
 package com.zhangxin.tmall.service;
 
 import com.zhangxin.tmall.dao.OrderDao;
+import com.zhangxin.tmall.dao.OrderItemDao;
 import com.zhangxin.tmall.pojo.Order;
+import com.zhangxin.tmall.pojo.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,9 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private OrderDao orderDao;
 
+    @Autowired
+    private OrderItemDao orderItemDao;
+
     //显示所有订单
     public List<Order> getAllOrderByAdmin(){
       List<Order> orderList =orderDao.getAllOrderByAdmin();
@@ -26,5 +31,26 @@ public class OrderServiceImpl implements OrderService{
     public void updateStatusAndDeliverDateById(int id, String status, Date deliverDate){
         orderDao.updateStatusById(id,status);
         orderDao.updateDeliverDateById(id,deliverDate);
+    }
+
+    //添加一个订单
+    @Transactional
+    public void addOrder(Order order,Integer orderItemId){
+        orderDao.addOrder(order);
+        OrderItem orderItem = new OrderItem();
+        orderItem.setId(orderItemId);
+        orderItem.setOrderId(order.getId());
+        orderItemDao.updateOrderItem(orderItem);
+    }
+    //根据orderId查询order
+    public Order getOrderById(int id){
+        Order order =orderDao.getOrderById(id);
+        return order;
+    }
+
+    //更新状态和paydate
+    public void updateStatusAndPayDateById(int id,String status,Date payDate){
+        orderDao.updateStatusById(id,status);
+        orderDao.updatePayDateById(id,payDate);
     }
 }

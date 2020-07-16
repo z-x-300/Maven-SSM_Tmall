@@ -65,4 +65,11 @@
             <id column="siximageid" property="id"/>
         </collection>
     </resultMap>
+    
+    <update id="updateStockAndSaleCountById">
+      update product set stock = stock - #{number},salecount = salecount + 1 where id = #{id}
+    </update>
+    <update id="updateStockById" parameterType="int">
+      update product set stock =stock+100 where id=#{id}
+    </update>
 </mapper>

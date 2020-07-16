@@ -40,4 +40,14 @@ public class ProductServiceImpl implements ProductService {
         Product product=productDao.getProductById(id);
         return product;
     }
+
+    //根据id修改库存和月销量
+    public void updateStockAndSaleCountById(int id,int number){
+        productDao.updateStockAndSaleCountById(id,number);
+    }
+
+    //库存不足自动添加库存
+    public void updateStockById(int id){
+        productDao.updateStockById(id);
+    }
 }

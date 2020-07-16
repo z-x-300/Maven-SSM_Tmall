@@ -23,11 +23,8 @@
 	</div>
 	<div id="center">
 		<div id="saoYisao">
-			<div>扫一扫付款(元)</div>
+			<div>付款(元)</div>
 			<div><span><fmt:formatNumber type="number" value="${param.totalMoney}" pattern="0.00" maxFractionDigits="2"/></span></div>
-		</div>
-		<div id="QRCode">
-			<img src="${pageContext.request.contextPath}/image/anotherPage/QRCode.png">
 		</div>
 		<div id="confirm">
 			<form method="post" action="${pageContext.request.contextPath}/order/payment.do">
