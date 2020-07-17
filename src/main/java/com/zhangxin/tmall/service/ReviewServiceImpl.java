@@ -17,4 +17,8 @@ public class ReviewServiceImpl implements ReviewService{
         List<Review> reviewList =reviewDao.getReviewByProductId(productId);
         return reviewList;
     }
+    //增加一个评论
+    public void addReview(Review review){
+        reviewDao.addReview(review);
+    }
 }

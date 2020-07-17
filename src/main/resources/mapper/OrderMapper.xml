@@ -22,4 +22,10 @@
     <update id="updatePayDateById">
     		update order_ set paydate = #{payDate} where id = #{id}
     	</update>
+    <select id="getALLOrderByUserId" parameterType="int" resultType="com.zhangxin.tmall.pojo.Order">
+        select * from order_ where userid = #{userId} and status != '已删除'
+    </select>
+    <update id="updateConfirmDateById">
+    		update order_ set confirmdate = #{confirmDate} where id = #{id}
+    	</update>
 </mapper>

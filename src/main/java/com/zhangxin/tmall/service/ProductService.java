@@ -19,4 +19,6 @@ public interface ProductService {
     public void updateStockAndSaleCountById(int id,int number);
     //库存不足自动添加库存
     public void updateStockById(int id);
+    //根据name模糊查询商品（映射fiveImage/sixImage）
+    public List<Product> getProductByName(String name);
 }

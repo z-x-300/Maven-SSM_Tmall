@@ -21,5 +21,8 @@ public interface OrderDao {
     public Order getOrderById(int id);
     //根据id修改payDate
     public void updatePayDateById(@Param("id") int id,@Param("payDate") Date payDate);
-
+    //根据用户id获取所有订单
+    public List<Order> getALLOrderByUserId(int userId);
+    //根据id修改确认收货日期
+    public void updateConfirmDateById(@Param("id") int id,@Param("confirmDate") Date confirmDate);
 }

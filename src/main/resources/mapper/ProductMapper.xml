@@ -72,4 +72,7 @@
     <update id="updateStockById" parameterType="int">
       update product set stock =stock+100 where id=#{id}
     </update>
+    <select id="getProductByName" parameterType="String" resultMap="ProductBean">
+    		select product.id productid,name,subtitle,orignalprice,promoteprice,stock,createdate,salecount,product.categoryid productcategoryid,fiveimage.id fiveimageid,littleimageuri,bigimageuri,siximage.id siximageid,imageuri from product left join fiveimage on product.id = fiveimage.productid left join siximage on siximage.productid = product.id where product.name like concat('%',#{name},'%')
+    	</select>
 </mapper>

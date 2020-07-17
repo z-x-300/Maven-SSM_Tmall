@@ -8,7 +8,7 @@
         select * from orderitem where orderid =#{orderId}
     </select>
     <select id="getOrderItemByUserId" parameterType="int" resultType="com.zhangxin.tmall.pojo.OrderItem">
-        select *from orderitem where userid =#{userId}
+       select * from orderitem where userid = #{userId} and orderid is null
     </select>
     <select id="getOrderItemByProductIdAndUserId" resultType="com.zhangxin.tmall.pojo.OrderItem">
         select * from orderitem where productid = #{productId} and userid = #{userId} and orderid is null

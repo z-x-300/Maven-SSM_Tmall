@@ -106,7 +106,7 @@
 <!-- 点击确认支付跳转页面 -->
 <script>
 	var jump = function(){
-		window.location.href = "finishPayment.jsp";
+		window.location.href = "${pageContext.request.contextPath}/jsp/anotherPage/finishPayment.jsp";
 	}
 </script>
 	

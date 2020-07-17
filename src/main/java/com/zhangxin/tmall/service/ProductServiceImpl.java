@@ -50,4 +50,10 @@ public class ProductServiceImpl implements ProductService {
     public void updateStockById(int id){
         productDao.updateStockById(id);
     }
+
+    //根据name模糊查询商品（映射fiveImage/sixImage）
+    public List<Product> getProductByName(String name){
+        List<Product> productList =productDao.getProductByName(name);
+        return productList;
+    }
 }
